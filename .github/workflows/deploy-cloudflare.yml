@@ -1,0 +1,51 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cloudflare/**'
+  workflow_dispatch: # 允许手动触发
+
+# 权限设置
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Sub-Store to Cloudflare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: cloudflare/package-lock.json
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Deploy to Cloudflare Workers
+        run: |
+          echo "🚀 Deploying to Cloudflare Workers..."
+          wrangler deploy --minify
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Deployment success
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "📝 Worker URL: https://sub-store.${{ secrets.CF_ACCOUNT_ID }}.workers.dev"
+
+      - name: Deployment failed
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Please check the logs for more information."

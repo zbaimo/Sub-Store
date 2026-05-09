@@ -1,0 +1,42 @@
+# Cloudflare Worker 配置
+# 文档: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "sub-store"
+main = "cloudflare/worker.js"
+compatibility_date = "2024-01-01"
+
+# 可选: 自定义域名
+# routes = [
+#   { pattern = "sub.example.com", custom_domain = true }
+# ]
+
+# 环境变量
+[vars]
+# 上游 Sub-Store 后端地址 (代理模式)
+# 留空则使用 KV 模式
+UPSTREAM_URL = ""
+
+# 认证令牌 (可选)
+AUTH_TOKEN = ""
+
+# 缓存时间 (秒)
+CACHE_TTL = "300"
+
+# 路径前缀 (可选)
+PATH_PREFIX = ""
+
+# KV 命名空间绑定 (KV 模式需要)
+# [[kv_namespaces]]
+# binding = "SUB_STORE_KV"
+# id = "your-kv-namespace-id"
+
+# 预览环境配置
+[env.preview]
+name = "sub-store-preview"
+[env.preview.vars]
+UPSTREAM_URL = ""
+CACHE_TTL = "60"
+
+# 如需绑定自定义域名, 取消以下注释
+# [env.preview.routes]
+# sub-preview.example.com = "sub-preview.example.com/*"

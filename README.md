@@ -119,6 +119,27 @@ SUB_STORE_BACKEND_API_PORT=3000 pnpm run --parallel "/^dev:.*/"
 pnpm bundle:esbuild
 ```
 
+### ☁️ Deploy to Cloudflare Workers
+
+This project includes a lightweight Cloudflare Worker version that can be deployed directly from GitHub.
+
+**Features:**
+- Proxy mode: Forward requests to your upstream Sub-Store backend
+- KV mode: Manage subscriptions using Cloudflare KV storage
+- Automatic caching for faster response
+- Token-based authentication
+
+**Quick Deploy:**
+
+1. Fork this repository
+2. Configure GitHub Secrets:
+   - `CF_API_TOKEN`: Your Cloudflare API Token
+   - `CF_ACCOUNT_ID`: Your Cloudflare Account ID
+3. Push changes to `main` branch or manually trigger the workflow
+4. Access your worker at `https://sub-store.<ACCOUNT_ID>.workers.dev`
+
+📖 **Full documentation**: [cloudflare/README.md](cloudflare/README.md)
+
 ## LICENSE
 
 This project is under the GPL V3 LICENSE.
